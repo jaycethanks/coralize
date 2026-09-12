@@ -1,14 +1,14 @@
 {
   "name": "coralize",
-  "displayName": "coralize",
-  "description": "customize the color of vscode window: change the color of Status bar, Title bar, and Activity Bar for your Visual Studio Code's Workspace quickly in an easy way.",
-  "version": "1.0.1",
+  "displayName": "Coralize",
+  "description": "轻巧的中国风工作区配色：点选传统色，按色系随机，独立设置标题栏、活动栏与状态栏。",
+  "version": "2.0.0",
   "publisher": "sunzhongyi",
   "icon": "resources/coralize.png",
   "engines": {
     "vscode": "^1.78.0"
   },
-  "repository": "https://github.com/jaycethanks/coralize/tree/main",
+  "repository": "https://github.com/joisun/coralize",
   "categories": [
     "Other"
   ],
@@ -26,7 +26,11 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [],
+    "commands": [
+      { "command": "coralize.open", "title": "打开配色", "category": "Coralize", "icon": "$(color-mode)" },
+      { "command": "coralize.setColor", "title": "设置工作区颜色", "category": "Coralize" },
+      { "command": "coralize.reset", "title": "清空工作区配色", "category": "Coralize", "icon": "$(discard)" }
+    ],
     "viewsContainers": {
       "activitybar": [
         {
@@ -41,12 +45,13 @@
         {
           "type": "webview",
           "id": "coralize-view",
-          "name": ""
+          "name": "配色"
         }
       ]
     },
     "configuration": {
-      "title": "Coralzie",
+      "title": "Coralize",
+      "scope": "window",
       "properties": {
         "coralize.color": {
           "type": [
@@ -54,36 +59,33 @@
             "null"
           ],
           "default": null,
-          "description": "auto set by coralize, and no need to set mannually"
+          "description": "Workspace color as a 3- or 6-digit HEX. Applying a color replaces all workspace color customizations; null clears them when changed."
         },
         "coralize.applyToTitleBar": {
           "type": "boolean",
           "default": true,
-          "description": "Specifie Whether Apply Coralize Color To Title Bar"
+          "description": "Color the title bar. Requires a custom title bar on platforms that use native window decorations."
         },
         "coralize.applyToSideBar": {
           "type": "boolean",
           "default": false,
-          "description": "Specifie Whether Apply Coralize Color To Side Bar"
+          "description": "Color the Activity Bar. The legacy setting name is retained; this does not color the Side Bar."
         },
         "coralize.applyToStatusBar": {
           "type": "boolean",
           "default": true,
-          "description": "Specifie Whether Apply Coralize Color To Status Bar"
+          "description": "Color the status bar. Debugging colors remain controlled by the theme."
         }
       }
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm test",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js",
-    "template:dev": "npm run scss & npm run tsc",
-    "tsc": "tsc --watch  --target es5 ./template/*.ts -outDir ./template/dist",
-    "scss": "scss --watch --no-cache ./template:./template/dist --sourcemap=none"
+    "test": "node --test test/*.test.cjs"
   },
   "devDependencies": {
     "@types/vscode": "^1.78.0",
